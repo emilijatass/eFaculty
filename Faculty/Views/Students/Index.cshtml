@@ -4,11 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Students</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <form asp-controller="Students" asp-action="Index" method="get">
     <p>
         Full Name: <input type="text" asp-for="SearchString" />
@@ -23,14 +24,12 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Students[0].FullName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Students[0].StudentId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students[0].LastName)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Students[0].EnrollmentDate)
             </th>
@@ -52,14 +51,19 @@
         {
             <tr>
                 <td>
+                    @{ if (item.ProfilePicture != null)
+                        {
+                            <img src="~/images/@item.ProfilePicture"
+                                 class="rounded-circle"
+                                 height="40" width="40"
+                                 asp-append-version="true" />}
+                        @item.FullName
+                    }
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.StudentId)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.EnrollmentDate)
                 </td>
@@ -73,10 +77,7 @@
                     @Html.DisplayFor(modelItem => item.EducationLevel)
                 </td>
                 <td>
-                    @foreach (var course in item.Courses)
-                    {
-                        <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.CourseId"> @course.Course.Title </a> <br />
-                    }
+                    <a asp-action="StudentCourses" asp-route-id="@item.Id">Show Courses</a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
